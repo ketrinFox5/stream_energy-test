@@ -41,8 +41,9 @@ function App() {
   const zodiacList = [
     {
         sign: "aries",
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: "March 21 - April 19"
+        language: userLanguage === 'ru' ? 'original' : 'translated',
+        period: "March 21 - April 19",
+        // time: 'March 21 - April 19'
     },
     {
         sign: "taurus",
@@ -106,13 +107,16 @@ function App() {
     try {
       setLoading(true); // Устанавливаем статус загрузки
       const response = await axios.post('https://poker247tech.ru/get_horoscope/', {
-        zodiac: zodiac,
+        sign: zodiac.sign,
+        language: zodiac.language,
+        period: "today"
       });
-
-      setDescription(response.data.description); // Устанавливаем описание
+      console.log(response.data)
+      setDescription(response.data.horoscope); 
+      console.log(description)// Устанавливаем описание
     } catch (error) {
-      console.error('Error fetching zodiac description:', error);
-      setDescription('Не удалось загрузить описание.');
+      console.error('Error fetching zodiac horoscope:', error);
+      setDescription('Не удалось загрузить гороскоп.');
     } finally {
       setLoading(false); // Завершаем загрузку
     }
@@ -143,7 +147,7 @@ function App() {
       {
         loading ? (<div>Загрузка...</div>) : (selectedZodiac && (
           <div>
-             <h2>{selectedZodiac.name}</h2>
+             <h2>{selectedZodiac.sign}</h2>
             <p>Период: {selectedZodiac.period}</p>
             <p>{description}</p>
           </div>
