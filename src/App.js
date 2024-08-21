@@ -10,7 +10,13 @@ function App() {
 
     // Получаем язык, установленный в Telegram
     const languageCode = tg.initDataUnsafe?.user?.language_code || 'en'; // Если язык не доступен, используем 'en'
-    setUserLanguage(languageCode);
+
+      // Если язык в Telegram - русский ('ru'), ставим русский, иначе английский
+      if (languageCode === 'ru') {
+        setUserLanguage('ru');
+      } else {
+        setUserLanguage('en');
+      }
 
     console.log('User data:', tg.initDataUnsafe.user); // Пример получения данных о пользователе
   }, []);
@@ -28,9 +34,7 @@ function App() {
   };
   return (
     <div className="App">
-      <h1>My Telegram MiniApp</h1>
-      <button onClick={() => window.Telegram.WebApp.close()}>Закрыть MiniApp</button>
-      <h2>{texts[userLanguage]?.welcome || texts['en'].welcome}</h2>
+      <h1>{texts[userLanguage]?.welcome || texts['en'].welcome}</h1>
       <button onClick={() => window.Telegram.WebApp.close()}>
         {texts[userLanguage]?.closeButton || texts['en'].closeButton}
       </button>
