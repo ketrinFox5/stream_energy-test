@@ -170,16 +170,18 @@ function App() {
       <button onClick={() => window.Telegram.WebApp.close()}>
         {texts[userLanguage]?.closeButton || texts['en'].closeButton}
       </button>
-      <div>
-        {zodiacList.map(zodiac => (
-          <div onClick={()=> handleZodiacClick(zodiac)} key={zodiac.id}>
-            <h2>{zodiac.sign}</h2>
-            <div>
-              {zodiac.period}
+      {view === 'list' && (
+        <div>
+          {zodiacList.map(zodiac => (
+            <div onClick={()=> handleZodiacClick(zodiac)} key={zodiac.id}>
+              <h2>{zodiac.sign}</h2>
+              <div>
+                {zodiac.period}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
       {view === 'description' && (
         <Horoscope
           zodiac={selectedZodiac}
