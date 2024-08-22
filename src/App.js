@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Horoscope from './components/Horoscope';
 import './App.css';
+import { zodiacListEn, zodiacListRu } from './const/zodiacList';
 
 function App() {
   const [userLanguage, setUserLanguage] = useState('en'); // По умолчанию английский язык
@@ -9,6 +10,7 @@ function App() {
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState('list'); // Состояние для переключения между списком и карточкой
+  const [zodiacList, setZodiacList] = useState(zodiacListEn);
   
   useEffect(() => {
     const tg = window.Telegram.WebApp;
@@ -20,8 +22,10 @@ function App() {
       // Если язык в Telegram - русский ('ru'), ставим русский, иначе английский
       if (languageCode === 'ru') {
         setUserLanguage('ru');
+        setZodiacList(zodiacListRu);
       } else {
         setUserLanguage('en');
+        setZodiacList(zodiacListEn);
       }
 
     console.log('User data:', tg.initDataUnsafe.user); // Пример получения данных о пользователе
@@ -56,93 +60,7 @@ function App() {
     }
   };
 
-  const zodiacList = [
-    {
-        sign: "aries",
-        language: userLanguage === 'ru' ? 'original' : 'translated',
-        period: "March 21 - April 19",
-        id: "aries",
-        icon: '/aries.png'
-        // time: 'March 21 - April 19'
-    },
-    {
-        sign: "taurus",
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: "April 20 - May 20",
-        id: "taurus",
-        icon: '/taurus.png'
-    },
-    { 
-        sign: 'gemini',
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: 'May 21 - June 20', 
-        id: "gemini",
-        icon: '/gemini.png'
-    },
-    { 
-        sign: 'cancer',
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: 'June 21 - July 22', 
-        id: "cancer",
-        icon: '/cancer.png'
-    },
-    { 
-        sign: 'leo',
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: 'July 23 - August 22', 
-        id: "leo",
-        icon: '/leo.png'
-    },
-    { 
-        sign: 'virgo',
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: 'August 23 - September 22', 
-        id: "virgo",
-        icon: '/virgo.png'
-    },
-    { 
-        sign: 'libra',
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: 'September 23 - October 22',
-        id: "libra",
-        icon: '/libra.png'
-    },
-    { 
-        sign: 'scorpio',
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: 'October 23 - November 21', 
-        id: "scorpio",
-        icon: '/scorpio.png'
-    },
-    { 
-        sign: 'sagittarius',
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: 'November 22 - December 21', 
-        id: "sagittarius",
-        icon: '/sagittarius.png'
-    },
-    { 
-        sign: 'capricorn',
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: 'December 22 - January 19', 
-        id: "capricorn",
-        icon: '/capricorn.png'
-    },
-    { 
-        sign: 'aquarius',
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: 'January 20 - February 18', 
-        id: "aquarius",
-        icon: '/aquarius.png'
-    },
-    { 
-        sign: 'pisces',
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
-        period: 'February 19 - March 20', 
-        id: "pisces",
-        icon: '/pisces.png'
-    },
-  ];
+  
 
    // Функция для получения описания знака зодиака через POST запрос
    const fetchZodiacDescription = async (zodiac) => {
@@ -150,7 +68,7 @@ function App() {
       setLoading(true); // Устанавливаем статус загрузки
       const response = await axios.post('https://poker247tech.ru/get_horoscope/', {
         sign: zodiac.sign,
-        language: zodiac.language,
+        language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: "today"
       });
       setDescription(response.data.horoscope); 
