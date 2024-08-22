@@ -67,7 +67,7 @@ function App() {
     try {
       setLoading(true); // Устанавливаем статус загрузки
       const response = await axios.post('https://poker247tech.ru/get_horoscope/', {
-        sign: zodiac.sign,
+        sign: zodiac.id,
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: "today"
       });
