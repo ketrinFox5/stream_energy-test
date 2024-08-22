@@ -7,10 +7,11 @@ const Horoscope = ({zodiac, horoscope, loading}) => {
         <>
             {
             loading ? (<div>Загрузка...</div>) : (zodiac && (
-                <div>
-                   <h2>{zodiac.sign}</h2>
-                  <p>Период: {zodiac.period}</p>
-                  <p>Ваш гороскоп на сегодня: {horoscope}</p>
+                <div className="zodiac">
+                    <img src={zodiac.icon} className="zodiac__icon"/>
+                    <h2 className="zodiac__title">{zodiac.sign}</h2>
+                    <div className="zodiac__period">{zodiac.period}</div>
+                    <div className="zodiac__horoscope">{horoscope}</div>
                 </div>
               ))
             }

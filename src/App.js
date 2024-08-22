@@ -47,12 +47,12 @@ function App() {
   // Пример текстов на разных языках
   const texts = {
     en: {
-      welcome: 'Welcome to My Telegram MiniApp!',
+      welcome: 'Find out your destiny for today!',
       closeButton: 'Close MiniApp'
     },
     ru: {
-      welcome: 'Добро пожаловать в My Telegram MiniApp!',
-      closeButton: 'Закрыть MiniApp'
+      welcome: 'Узнай свою судьбу на сегодня!',
+      closeButton: 'Закрыть приложение'
     }
   };
 
@@ -61,74 +61,86 @@ function App() {
         sign: "aries",
         language: userLanguage === 'ru' ? 'original' : 'translated',
         period: "March 21 - April 19",
-        id: "aries"
+        id: "aries",
+        icon: '/aries.png'
         // time: 'March 21 - April 19'
     },
     {
         sign: "taurus",
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: "April 20 - May 20",
-        id: "taurus"
+        id: "taurus",
+        icon: '/taurus.png'
     },
     { 
         sign: 'gemini',
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: 'May 21 - June 20', 
-        id: "gemini"
+        id: "gemini",
+        icon: '/gemini.png'
     },
     { 
         sign: 'cancer',
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: 'June 21 - July 22', 
-        id: "cancer"
+        id: "cancer",
+        icon: '/cancer.png'
     },
     { 
         sign: 'leo',
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: 'July 23 - August 22', 
-        id: "leo"
+        id: "leo",
+        icon: '/leo.png'
     },
     { 
         sign: 'virgo',
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: 'August 23 - September 22', 
-        id: "virgo"
+        id: "virgo",
+        icon: '/virgo.png'
     },
     { 
         sign: 'libra',
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: 'September 23 - October 22',
-        id: "libra" 
+        id: "libra",
+        icon: '/libra.png'
     },
     { 
         sign: 'scorpio',
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: 'October 23 - November 21', 
-        id: "scorpio" 
+        id: "scorpio",
+        icon: '/scorpio.png'
     },
     { 
         sign: 'sagittarius',
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: 'November 22 - December 21', 
-        id: "sagittarius"
+        id: "sagittarius",
+        icon: '/sagittarius.png'
     },
     { 
         sign: 'capricorn',
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: 'December 22 - January 19', 
-        id: "capricorn"
+        id: "capricorn",
+        icon: '/capricorn.png'
     },
     { 
         sign: 'aquarius',
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: 'January 20 - February 18', 
-        id: "aquarius"
+        id: "aquarius",
+        icon: '/aquarius.png'
     },
     { 
         sign: 'pisces',
         language: userLanguage === 'ru' ? 'original' : 'transleted',
         period: 'February 19 - March 20', 
-        id: "pisces"
+        id: "pisces",
+        icon: '/pisces.png'
     },
   ];
 
@@ -173,11 +185,18 @@ function App() {
       {view === 'list' && (
         <div>
           {zodiacList.map(zodiac => (
-            <div onClick={()=> handleZodiacClick(zodiac)} key={zodiac.id}>
-              <h2>{zodiac.sign}</h2>
-              <div>
-                {zodiac.period}
-              </div>
+            <div 
+                onClick={()=> handleZodiacClick(zodiac)}
+                key={zodiac.id}
+                className="zodiac"
+            >
+                <img src={zodiac.icon} className="zodiac__icon"/>
+                <h2 className="zodiac__title">
+                  {zodiac.sign}
+                </h2>
+                <div className="zodiac__period">
+                  {zodiac.period}
+                </div>
             </div>
           ))}
         </div>
