@@ -128,6 +128,7 @@ function App() {
           zodiac={selectedZodiac}
           horoscope={description}
           loading={loading}
+          onBack={handleBackClick}
         />
       )}
     </div>

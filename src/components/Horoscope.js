@@ -2,7 +2,7 @@ import { useSwipeable } from 'react-swipeable'
 
 const Horoscope = ({zodiac, horoscope, loading, onBack}) => {
     const swipeHandlers = useSwipeable({
-        onSwipedRight: onBack,
+        onSwipedRight: () => onBack(),
         preventDefaultTouchmoveEvent: true,
         trackMouse: true,
     });
