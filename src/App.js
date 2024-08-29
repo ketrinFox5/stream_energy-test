@@ -96,12 +96,16 @@ function App() {
 
   return (
     <div className="App">
-      <h1>{texts[userLanguage]?.welcome || texts['en'].welcome}</h1>
-      <button onClick={() => window.Telegram.WebApp.close()}>
+      <div className="header">
+      <button className="close__btn" onClick={() => window.Telegram.WebApp.close()}>
         {texts[userLanguage]?.closeButton || texts['en'].closeButton}
       </button>
+      <h1>{texts[userLanguage]?.welcome || texts['en'].welcome}</h1>
+     
+      </div>
+      
       {view === 'list' && (
-        <div>
+        <div className="zodiacs">
           {zodiacList.map(zodiac => (
             <div 
                 onClick={()=> handleZodiacClick(zodiac)}

@@ -1,6 +1,7 @@
 .App {
   font-family: 'Monserrat', sans-serif;
   text-align: center;
+  color: black;
 }
 
 .App-logo {
@@ -36,6 +37,27 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.header {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.close__btn {
+  padding: 10px;
+  align-self: flex-end;
+  color: #FFE3CA;
+  background: #A44F3E;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.zodiacs {
+
 }
 
 .zodiac {

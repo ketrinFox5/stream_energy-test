@@ -1,3 +1,5 @@
+import Spinner from './Spinner';
+
 const Horoscope = ({zodiac, horoscope, loading}) => {
     if (!zodiac) {
         return null;
@@ -6,7 +8,7 @@ const Horoscope = ({zodiac, horoscope, loading}) => {
     return (
         <>
             {
-            loading ? (<div>Загрузка...</div>) : (zodiac && (
+            loading ? (<div>...</div>) : (zodiac && (
                 <div className="zodiac">
                     <img src={zodiac.icon} className="zodiac__icon"/>
                     <h2 className="zodiac__title">{zodiac.sign}</h2>
