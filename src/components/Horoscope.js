@@ -1,4 +1,12 @@
-const Horoscope = ({zodiac, horoscope, loading}) => {
+import { useSwipeable } from 'react-swipeable'
+
+const Horoscope = ({zodiac, horoscope, loading, onBack}) => {
+    const swipeHandlers = useSwipeable({
+        onSwipedRight: onBack,
+        preventDefaultTouchmoveEvent: true,
+        trackMouse: true,
+    });
+
     if (!zodiac) {
         return null;
     }
@@ -7,7 +15,7 @@ const Horoscope = ({zodiac, horoscope, loading}) => {
         <>
             {
             loading ? (<div className="spinner"></div>) : (zodiac && (
-                <div className="zodiac">
+                <div className="zodiac" {...swipeHandlers}>
                     <img src={zodiac.icon} className="zodiac__icon"/>
                     <h2 className="zodiac__title">{zodiac.sign}</h2>
                     <div className="zodiac__period">{zodiac.period}</div>
