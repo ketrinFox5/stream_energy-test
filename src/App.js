@@ -5,12 +5,13 @@ import './App.css';
 import { zodiacListEn, zodiacListRu } from './const/zodiacList';
 
 function App() {
-  const [userLanguage, setUserLanguage] = useState('en'); // По умолчанию английский язык
+  const [language, setLanguage] = useState('en'); // По умолчанию английский язык
   const [selectedZodiac, setSelectedZodiac] = useState(null);
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState('list'); // Состояние для переключения между списком и карточкой
   const [zodiacList, setZodiacList] = useState(zodiacListEn);
+  const [zodiacId, setZodiacId] = useState(null);
   
   useEffect(() => {
     const tg = window.Telegram.WebApp;
@@ -21,10 +22,10 @@ function App() {
 
       // Если язык в Telegram - русский ('ru'), ставим русский, иначе английский
       if (languageCode === 'ru') {
-        setUserLanguage('ru');
+        setLanguage('ru');
         setZodiacList(zodiacListRu);
       } else {
-        setUserLanguage('en');
+        setLanguage('en');
         setZodiacList(zodiacListEn);
       }
 
@@ -49,26 +50,26 @@ function App() {
   }, [view]);
 
   // Пример текстов на разных языках
-  const texts = {
+  const translations = {
     en: {
-      welcome: 'Find out your destiny for today!',
-      closeButton: 'Close MiniApp'
+      title: 'Find out your destiny for today!',
+      back: 'Back'
     },
     ru: {
-      welcome: 'Узнай свою судьбу на сегодня!',
-      closeButton: 'Закрыть приложение'
+      title: 'Узнай свою судьбу на сегодня!',
+      back: 'Назад'
     }
   };
 
-  
+  const currentTranslations = translations[language];
 
    // Функция для получения описания знака зодиака через POST запрос
-   const fetchZodiacDescription = async (zodiac) => {
+   const fetchZodiacDescription = async (zodiacId) => {
     try {
       setLoading(true); // Устанавливаем статус загрузки
       const response = await axios.post('https://poker247tech.ru/get_horoscope/', {
-        sign: zodiac.id,
-        language: userLanguage === 'ru' ? 'original' : 'transleted',
+        sign: zodiacId,
+        language: language === 'ru' ? 'original' : 'transleted',
         period: "today"
       });
       setDescription(response.data.horoscope); 
@@ -81,10 +82,10 @@ function App() {
   };
 
   // Обработчик клика по знаку зодиака
-  const handleZodiacClick = (zodiac) => {
-    setSelectedZodiac(zodiac);
+  const handleZodiacClick = (zodiacId) => {
+    setZodiacId(zodiacId);
     setView('description'); // Переключаем на просмотр описания
-    fetchZodiacDescription(zodiac);
+    fetchZodiacDescription(zodiacId);
   };
 
     // Функция для возврата к списку через Telegram BackButton
@@ -94,13 +95,41 @@ function App() {
       setView('list'); // Переключаем на просмотр списка
     };
 
+    const handleLanguageChange = (lang) => {
+      setLanguage(lang);
+      lang === 'ru' ? setZodiacList(zodiacListRu) : setZodiacList(zodiacListEn);
+    };
+
+    useEffect(() => {
+      if (selectedZodiac) {
+        fetchZodiacDescription(selectedZodiac, language);
+      }
+    }, [language]);
+
+    useEffect(() => {
+      const zodiac = zodiacList.find(z => zodiacId === z.id);
+      setSelectedZodiac(zodiac);
+      console.log(zodiacId)
+    }, [zodiacList, zodiacId]);
+
   return (
     <div className="App">
       <div className="header">
-      <button className="close__btn" onClick={() => window.Telegram.WebApp.close()}>
+      {/* <button className="close__btn" onClick={() => window.Telegram.WebApp.close()}>
         {texts[userLanguage]?.closeButton || texts['en'].closeButton}
-      </button>
-      <h1>{texts[userLanguage]?.welcome || texts['en'].welcome}</h1>
+      </button> */}
+      {/* <button className="language__btn" onClick={() => window.Telegram.WebApp.close()}>
+        {translations[language]?.closeButton || translations['en'].closeButton}
+      </button> */}
+      <div className="language__switcher">
+        <button onClick={() => handleLanguageChange('en')} className="language__btn">
+          English
+        </button>
+        <button onClick={() => handleLanguageChange('ru')} className="language__btn" >
+          Русский
+        </button>
+      </div>
+      <h1>{currentTranslations.title}</h1>
      
       </div>
       
@@ -108,7 +137,7 @@ function App() {
         <div className="zodiacs">
           {zodiacList.map(zodiac => (
             <div 
-                onClick={()=> handleZodiacClick(zodiac)}
+                onClick={()=> handleZodiacClick(zodiac.id)}
                 key={zodiac.id}
                 className="zodiac"
             >
