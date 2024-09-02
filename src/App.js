@@ -12,6 +12,7 @@ function App() {
   const [view, setView] = useState('list'); // Состояние для переключения между списком и карточкой
   const [zodiacList, setZodiacList] = useState(zodiacListEn);
   const [zodiacId, setZodiacId] = useState(null);
+  const [isExpanded, setIsExpanded] = useState(true); // Новое состояние для управления viewport
   
   useEffect(() => {
     const tg = window.Telegram.WebApp;
@@ -48,6 +49,26 @@ function App() {
       tg.BackButton.offClick(handleBackClick);
     };
   }, [view]);
+
+   // Обработчик для события viewport_changed
+   useEffect(() => {
+    const tg = window.Telegram.WebApp;
+
+    tg.onEvent('viewport_changed', (viewport) => {
+      setIsExpanded(viewport.isExpanded);
+    });
+
+    return () => {
+      tg.offEvent('viewport_changed');
+    };
+  }, []);
+
+  useEffect(() => {
+    const appContainer = document.getElementById('app-container');
+    if (appContainer) {
+      appContainer.style.height = isExpanded ? '100vh' : '50vh';
+    }
+  }, [isExpanded]);
 
   // Пример текстов на разных языках
   const translations = {
@@ -113,7 +134,7 @@ function App() {
     }, [zodiacList, zodiacId]);
 
   return (
-    <div className="App">
+    <div className="App" id="app-container">
       <div className="header">
       {/* <button className="close__btn" onClick={() => window.Telegram.WebApp.close()}>
         {texts[userLanguage]?.closeButton || texts['en'].closeButton}
