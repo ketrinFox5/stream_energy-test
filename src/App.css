@@ -37,18 +37,14 @@ h1 {
   margin-left: 10px;
   padding: 10px;
   color: #FFE3CA;
-  /* color: black; */
   background: #A44F3E;
-  /* background: transporent; */
   border: 1px solid black;
-  /* border: none; */
   border-radius: 10px;
   cursor: pointer;
   opacity: 0.8;
 }
 
 .language__btn:hover {
-  /* background: #A44F3E; */
   opacity: 1;
 }
 
@@ -56,14 +52,7 @@ h1 {
   background: #000;
 }
 
-.zodiacs {
-
-}
-
 .zodiac {
-  /* display: flex;
-  align-items: center; */
-  /* margin-bottom: 30px; */
   padding: 30px;
   min-width: 320px;
   max-width: 100%;

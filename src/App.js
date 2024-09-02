@@ -5,23 +5,22 @@ import './App.css';
 import { zodiacListEn, zodiacListRu } from './const/zodiacList';
 
 function App() {
-  const [language, setLanguage] = useState('en'); // По умолчанию английский язык
+  const [language, setLanguage] = useState('en');
   const [selectedZodiac, setSelectedZodiac] = useState(null);
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
-  const [view, setView] = useState('list'); // Состояние для переключения между списком и карточкой
+  const [view, setView] = useState('list');
   const [zodiacList, setZodiacList] = useState(zodiacListEn);
   const [zodiacId, setZodiacId] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(true); // Новое состояние для управления viewport
+  const [isExpanded, setIsExpanded] = useState(true);
   
   useEffect(() => {
     const tg = window.Telegram.WebApp;
+
     tg.ready();
 
-    // Получаем язык, установленный в Telegram
-    const languageCode = tg.initDataUnsafe?.user?.language_code || 'en'; // Если язык не доступен, используем 'en'
+    const languageCode = tg.initDataUnsafe?.user?.language_code || 'en';
 
-      // Если язык в Telegram - русский ('ru'), ставим русский, иначе английский
       if (languageCode === 'ru') {
         setLanguage('ru');
         setZodiacList(zodiacListRu);
@@ -29,29 +28,24 @@ function App() {
         setLanguage('en');
         setZodiacList(zodiacListEn);
       }
-
-    console.log('User data:', tg.initDataUnsafe.user); // Пример получения данных о пользователе
   }, []);
 
-   // Используем useEffect для обработки BackButton
-   useEffect(() => {
+  useEffect(() => {
     const tg = window.Telegram.WebApp;
 
     if (view === 'description') {
-      tg.BackButton.show(); // Показать кнопку "Назад" в интерфейсе Telegram
-      tg.BackButton.onClick(handleBackClick); // Назначить обработчик нажатия
+      tg.BackButton.show();
+      tg.BackButton.onClick(handleBackClick);
     } else {
-      tg.BackButton.hide(); // Скрыть кнопку "Назад", когда мы находимся в списке
+      tg.BackButton.hide();
     }
 
-    // Очищаем обработчик при выходе из компонента или при изменении view
     return () => {
       tg.BackButton.offClick(handleBackClick);
     };
   }, [view]);
 
-   // Обработчик для события viewport_changed
-   useEffect(() => {
+  useEffect(() => {
     const tg = window.Telegram.WebApp;
 
     tg.onEvent('viewport_changed', (viewport) => {
@@ -70,7 +64,6 @@ function App() {
     }
   }, [isExpanded]);
 
-  // Пример текстов на разных языках
   const translations = {
     en: {
       title: 'Find out your destiny for today!',
@@ -84,10 +77,9 @@ function App() {
 
   const currentTranslations = translations[language];
 
-   // Функция для получения описания знака зодиака через POST запрос
-   const fetchZodiacDescription = async (zodiacId) => {
+  const fetchZodiacDescription = async (zodiacId) => {
     try {
-      setLoading(true); // Устанавливаем статус загрузки
+      setLoading(true);
       const response = await axios.post('https://poker247tech.ru/get_horoscope/', {
         sign: zodiacId,
         language: language === 'ru' ? 'original' : 'transleted',
@@ -98,60 +90,50 @@ function App() {
       console.error('Error fetching zodiac horoscope:', error);
       setDescription('Не удалось загрузить гороскоп.');
     } finally {
-      setLoading(false); // Завершаем загрузку
+      setLoading(false);
     }
   };
 
-  // Обработчик клика по знаку зодиака
   const handleZodiacClick = (zodiacId) => {
     setZodiacId(zodiacId);
-    setView('description'); // Переключаем на просмотр описания
+    setView('description');
     fetchZodiacDescription(zodiacId);
   };
 
-    // Функция для возврата к списку через Telegram BackButton
-    const handleBackClick = () => {
-      setSelectedZodiac(null);
-      setDescription('');
-      setView('list'); // Переключаем на просмотр списка
-    };
+  const handleBackClick = () => {
+    setSelectedZodiac(null);
+    setDescription('');
+    setView('list');
+  };
 
-    const handleLanguageChange = (lang) => {
-      setLanguage(lang);
-      lang === 'ru' ? setZodiacList(zodiacListRu) : setZodiacList(zodiacListEn);
-    };
+  const handleLanguageChange = (lang) => {
+    setLanguage(lang);
+    lang === 'ru' ? setZodiacList(zodiacListRu) : setZodiacList(zodiacListEn);
+  };
 
-    useEffect(() => {
-      if (selectedZodiac) {
-        fetchZodiacDescription(selectedZodiac, language);
-      }
-    }, [language]);
+  useEffect(() => {
+    if (selectedZodiac) {
+      fetchZodiacDescription(selectedZodiac, language);
+    }
+  }, [language]);
 
-    useEffect(() => {
-      const zodiac = zodiacList.find(z => zodiacId === z.id);
-      setSelectedZodiac(zodiac);
-      console.log(zodiacId)
-    }, [zodiacList, zodiacId]);
+  useEffect(() => {
+    const zodiac = zodiacList.find(z => zodiacId === z.id);
+    setSelectedZodiac(zodiac);
+  }, [zodiacList, zodiacId]);
 
   return (
     <div className="App" id="app-container">
       <div className="header">
-      {/* <button className="close__btn" onClick={() => window.Telegram.WebApp.close()}>
-        {texts[userLanguage]?.closeButton || texts['en'].closeButton}
-      </button> */}
-      {/* <button className="language__btn" onClick={() => window.Telegram.WebApp.close()}>
-        {translations[language]?.closeButton || translations['en'].closeButton}
-      </button> */}
-      <div className="language__switcher">
-        <button onClick={() => handleLanguageChange('en')} className="language__btn">
-          English
-        </button>
-        <button onClick={() => handleLanguageChange('ru')} className="language__btn" >
-          Русский
-        </button>
-      </div>
-      <h1>{currentTranslations.title}</h1>
-     
+        <div className="language__switcher">
+          <button onClick={() => handleLanguageChange('en')} className="language__btn">
+            English
+          </button>
+          <button onClick={() => handleLanguageChange('ru')} className="language__btn" >
+            Русский
+          </button>
+        </div>
+        <h1>{currentTranslations.title}</h1>
       </div>
       
       {view === 'list' && (
@@ -173,6 +155,7 @@ function App() {
           ))}
         </div>
       )}
+      
       {view === 'description' && (
         <Horoscope
           zodiac={selectedZodiac}
